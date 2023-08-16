@@ -1,20 +1,35 @@
-//Create Web Server
-var express = require('express');
-var app = express();
+var http = require('http'); // Import Node.js core module
 
-app.get('/', function (req, res) {
-  var sql = require("mssql");
-  var config = {user:'user', password:'pass', server:'myServer', database:'myDB'};
-  sql.connect(config, function (err) {
-    if (err) console.log(err);
-    var request = new sql.Request();
-    request.query('SELECT CompanyName, City, Country FROM Customers', function (err, recordset) {
-      if (err) console.log(err)
-      res.send(recordset);
-    });
-  });
+var server = http.createServer(function (req, res) {   //create web server
+    if (req.url == '/') { //check the URL of the current request
+        
+        // set response header
+        res.writeHead(200, { 'Content-Type': 'text/html' }); 
+        
+        // set response content    
+        res.write('<html><body><p>This is home Page.</p></body></html>');
+        res.end();
+    
+    }
+    else if (req.url == "/student") {
+        
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write('<html><body><p>This is student Page.</p></body></html>');
+        res.end();
+    
+    }
+    else if (req.url == "/admin") {
+        
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write('<html><body><p>This is admin Page.</p></body></html>');
+        res.end();
+    
+    }
+    else
+        res.end('Invalid Request!');
+
 });
 
-var server = app.listen(5000, function () {
-console.log('Server is running..');
-});
+server.listen(5000); //6 - listen for any incoming requests
+
+console.log('Node.js web server at port 5000 is running..')
